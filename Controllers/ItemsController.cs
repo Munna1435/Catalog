@@ -10,9 +10,9 @@ namespace Catalog.Controllers
     [ApiController]
     public class ItemsController : ControllerBase
     {
-        private readonly IInMemoryItems repository;
+        private readonly IItemsRepository repository;
 
-        public ItemsController(IInMemoryItems repository)
+        public ItemsController(IItemsRepository repository)
         {
             this.repository = repository;
         }
@@ -77,7 +77,7 @@ namespace Catalog.Controllers
             {
                 return NotFound();
             }
-            repository.DeleteItem(id);
+            repository.DeleteItem(item);
             return NoContent();
         }
     }
