@@ -8,46 +8,39 @@ namespace Catalog.Repositories
 {
     public class Items: IItemsRepository
     {
-        private readonly List<Item> items = new List<Item>()
-        {
-            new Item() { Id = Guid.NewGuid(), Name = "Potion", Price = 9, CreatedAt = DateTimeOffset.UtcNow },
-            new Item() { Id = Guid.NewGuid(), Name = "Iron Sword", Price = 20, CreatedAt = DateTimeOffset.UtcNow },
-            new Item() { Id = Guid.NewGuid(), Name = "Bronze Sheild", Price = 18, CreatedAt = DateTimeOffset.UtcNow }
-        };
         private readonly ApplicationDbContext context;
 
         public Items(ApplicationDbContext context)
         {
             this.context = context;
         }
-        public void CreateItem(Item item)
+        public async Task CreateItemAsync(Item item)
         {
-            context.Items.Add(item);
-            context.SaveChanges();
+            await context.Items.AddAsync(item);
+            await context.SaveChangesAsync();
         }
 
-        public void DeleteItem(Item item)
+        public async Task DeleteItemAsync(Item item)
         {
             context.Items.Remove(item);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public Item GetItem(Guid id)
+        public async Task<Item> GetItemAsync(Guid id)
         {
-            return context.Items.AsNoTracking().FirstOrDefault(Item => Item.Id == id);
+            return await context.Items.AsNoTracking().FirstOrDefaultAsync(Item => Item.Id == id);
             
         }
 
-        public IEnumerable<Item> GetItems()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            return context.Items.ToList();
+            return await context.Items.ToListAsync();
         }
 
-        public void UpdateItem(Item item)
+        public async Task UpdateItemAsync(Item item)
         {
             context.Items.Update(item);
-
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
         }
     }
